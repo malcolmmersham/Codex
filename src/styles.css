@@ -5,6 +5,18 @@
   --text: #e9efff;
   --muted: #b6c4f8;
   --accent: #66cbff;
+  --hero-start: #1f2f74aa;
+  --hero-end: #160f3bab;
+  --hero-border: #89a2ff4d;
+  --card-border: #90a8ff35;
+  --card-bg-start: #11193fcc;
+  --card-bg-end: #121130aa;
+  --danger: #ffb6c8;
+  --danger-bg: #ff5b8330;
+  --danger-border: #ff84a966;
+  --bar-start: #63ceff;
+  --bar-end: #7a7dff;
+  --spark: #8cd4ff;
 }
 
 * { box-sizing: border-box; }
@@ -15,8 +27,8 @@ body {
   font-family: Inter, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
   color: var(--text);
   background:
-    radial-gradient(1100px 400px at 5% -10%, #2a4f9a66, transparent 70%),
-    radial-gradient(1000px 500px at 95% 0%, #8d2e7e45, transparent 65%),
+    radial-gradient(1100px 400px at 5% -10%, color-mix(in srgb, var(--accent) 35%, transparent), transparent 70%),
+    radial-gradient(1000px 500px at 95% 0%, color-mix(in srgb, var(--danger) 25%, transparent), transparent 65%),
     linear-gradient(160deg, var(--bg-b), var(--bg-a));
 }
 
@@ -27,10 +39,10 @@ body {
 }
 
 .hero {
-  border: 1px solid #89a2ff4d;
+  border: 1px solid var(--hero-border);
   border-radius: 24px;
   padding: 1.7rem;
-  background: linear-gradient(130deg, #1f2f74aa, #160f3bab);
+  background: linear-gradient(130deg, var(--hero-start), var(--hero-end));
   box-shadow: 0 30px 80px #01020f99;
   backdrop-filter: blur(8px);
 }
@@ -41,7 +53,7 @@ body {
   text-transform: uppercase;
   font-size: 0.72rem;
   font-weight: 700;
-  color: #99d8ff;
+  color: color-mix(in srgb, var(--accent) 78%, white);
 }
 
 .hero h1 {
@@ -54,6 +66,12 @@ body {
   color: #d8e1ff;
   max-width: 74ch;
   line-height: 1.55;
+}
+
+.theme-source {
+  margin: 0.8rem 0 0;
+  font-size: 0.78rem;
+  color: var(--muted);
 }
 
 .kpi-grid {
@@ -82,7 +100,7 @@ body {
   font-size: 1.3rem;
 }
 
-.neg { color: #ff9cb5; }
+.neg { color: color-mix(in srgb, var(--danger) 85%, white); }
 
 .toolbar {
   margin: 1rem 0 0.7rem;
@@ -106,7 +124,7 @@ body {
 
 select {
   border-radius: 10px;
-  border: 1px solid #89a2ff55;
+  border: 1px solid var(--hero-border);
   background: #0f163a;
   color: var(--text);
   padding: 0.4rem 0.6rem;
@@ -119,10 +137,10 @@ select {
 }
 
 .card {
-  border: 1px solid #90a8ff35;
+  border: 1px solid var(--card-border);
   border-radius: 18px;
   padding: 1rem;
-  background: linear-gradient(165deg, #11193fcc, #121130aa);
+  background: linear-gradient(165deg, var(--card-bg-start), var(--card-bg-end));
   box-shadow: 0 20px 40px #00000059;
 }
 
@@ -139,9 +157,9 @@ select {
 }
 
 .badge {
-  background: #ff5b8330;
-  border: 1px solid #ff84a966;
-  color: #ffb6c8;
+  background: var(--danger-bg);
+  border: 1px solid var(--danger-border);
+  color: var(--danger);
   border-radius: 999px;
   padding: 0.2rem 0.55rem;
   font-size: 0.72rem;
@@ -169,7 +187,7 @@ select {
 .bar {
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, #63ceff, #7a7dff);
+  background: linear-gradient(90deg, var(--bar-start), var(--bar-end));
   box-shadow: 0 0 24px #6ea4ff99;
 }
 
@@ -181,7 +199,7 @@ select {
 
 .sparkline polyline {
   fill: none;
-  stroke: #8cd4ff;
+  stroke: var(--spark);
   stroke-width: 2.3;
 }
 
