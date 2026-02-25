@@ -1,185 +1,219 @@
 :root {
   color-scheme: dark;
-  font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  background: radial-gradient(circle at 20% 15%, #272f66 0%, #090b17 45%, #05060d 100%);
-  color: #f3f6ff;
+  --bg-a: #060716;
+  --bg-b: #11183a;
+  --text: #e9efff;
+  --muted: #b6c4f8;
+  --accent: #66cbff;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
   min-height: 100vh;
+  font-family: Inter, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(1100px 400px at 5% -10%, #2a4f9a66, transparent 70%),
+    radial-gradient(1000px 500px at 95% 0%, #8d2e7e45, transparent 65%),
+    linear-gradient(160deg, var(--bg-b), var(--bg-a));
 }
 
-.dashboard {
+.app-shell {
+  max-width: 1260px;
   margin: 0 auto;
-  max-width: 1200px;
-  padding: 3rem 1.4rem 2.5rem;
+  padding: 2.2rem 1.2rem 2.8rem;
 }
 
 .hero {
-  backdrop-filter: blur(8px);
-  background: linear-gradient(130deg, rgb(26 36 90 / 75%), rgb(18 17 45 / 65%));
-  border: 1px solid rgb(158 179 255 / 30%);
+  border: 1px solid #89a2ff4d;
   border-radius: 24px;
-  box-shadow: 0 24px 60px rgb(0 0 0 / 45%);
-  margin-bottom: 1.3rem;
-  padding: 2rem;
+  padding: 1.7rem;
+  background: linear-gradient(130deg, #1f2f74aa, #160f3bab);
+  box-shadow: 0 30px 80px #01020f99;
+  backdrop-filter: blur(8px);
 }
 
 .eyebrow {
-  color: #8fc7ff;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.22em;
   margin: 0;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #99d8ff;
 }
 
 .hero h1 {
-  font-size: clamp(1.7rem, 3vw, 2.5rem);
-  margin: 0.45rem 0 0.8rem;
+  margin: 0.5rem 0 0.7rem;
+  font-size: clamp(1.6rem, 3.4vw, 2.6rem);
 }
 
-.hero > p {
-  color: #d4ddff;
-  line-height: 1.55;
+.hero-copy {
   margin: 0;
-  max-width: 75ch;
+  color: #d8e1ff;
+  max-width: 74ch;
+  line-height: 1.55;
 }
 
-.stats-grid {
+.kpi-grid {
+  margin-top: 1rem;
   display: grid;
-  gap: 0.85rem;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  margin-top: 1.2rem;
+  gap: 0.8rem;
+  grid-template-columns: repeat(auto-fit, minmax(165px, 1fr));
 }
 
-.stats-grid article {
-  background: rgb(8 12 30 / 80%);
-  border: 1px solid rgb(173 189 255 / 18%);
+.kpi-grid article {
+  border: 1px solid #9fb4ff2d;
   border-radius: 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  padding: 0.85rem;
+  padding: 0.8rem;
+  background: #0c123199;
 }
 
-.stats-grid span {
-  color: #9caedc;
-  font-size: 0.75rem;
+.kpi-grid span {
+  font-size: 0.74rem;
+  color: #a6b8ef;
   text-transform: uppercase;
 }
 
-.stats-grid strong {
-  font-size: 1.2rem;
+.kpi-grid strong {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 1.3rem;
 }
 
-.card-grid {
-  display: grid;
-  gap: 0.95rem;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-}
+.neg { color: #ff9cb5; }
 
-.trend-card {
-  background: linear-gradient(160deg, rgb(14 19 49 / 90%), rgb(11 14 34 / 70%));
-  border: 1px solid rgb(157 172 247 / 25%);
-  border-radius: 18px;
-  box-shadow: 0 18px 35px rgb(0 0 0 / 25%);
-  padding: 1rem;
-}
-
-.trend-card header {
-  align-items: flex-start;
+.toolbar {
+  margin: 1rem 0 0.7rem;
   display: flex;
-  gap: 0.7rem;
   justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
 }
 
-.trend-card h2 {
-  font-size: 1rem;
+.toolbar h2 {
   margin: 0;
+  font-size: 1.05rem;
 }
 
-.chip {
+.sort-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--muted);
+}
+
+select {
+  border-radius: 10px;
+  border: 1px solid #89a2ff55;
+  background: #0f163a;
+  color: var(--text);
+  padding: 0.4rem 0.6rem;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 0.9rem;
+}
+
+.card {
+  border: 1px solid #90a8ff35;
+  border-radius: 18px;
+  padding: 1rem;
+  background: linear-gradient(165deg, #11193fcc, #121130aa);
+  box-shadow: 0 20px 40px #00000059;
+}
+
+.card-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.7rem;
+  align-items: flex-start;
+}
+
+.card h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.badge {
+  background: #ff5b8330;
+  border: 1px solid #ff84a966;
+  color: #ffb6c8;
   border-radius: 999px;
+  padding: 0.2rem 0.55rem;
   font-size: 0.72rem;
   font-weight: 700;
-  padding: 0.2rem 0.55rem;
-  white-space: nowrap;
 }
 
-.chip-danger {
-  background: rgb(252 78 110 / 18%);
-  border: 1px solid rgb(252 120 145 / 40%);
-  color: #ff9bb1;
-}
-
-.value-row {
-  align-items: baseline;
+.value-band {
+  margin-top: 0.7rem;
   display: flex;
-  gap: 0.55rem;
-  margin-top: 0.75rem;
+  align-items: baseline;
+  gap: 0.5rem;
 }
 
-.value-row strong {
-  font-size: 1.6rem;
-}
+.value-band strong { font-size: 1.7rem; }
+.value-band small { color: var(--muted); }
 
-.value-row small {
-  color: #b7c2ef;
-}
-
-.progress-wrap {
-  background: rgb(161 177 255 / 12%);
-  border-radius: 99px;
-  height: 8px;
-  margin-top: 0.75rem;
+.bar-bg {
+  margin-top: 0.65rem;
+  border-radius: 999px;
+  height: 9px;
+  background: #9eb7ff1f;
   overflow: hidden;
 }
 
-.progress {
-  background: linear-gradient(90deg, #6ab3ff, #7a73ff);
-  border-radius: inherit;
-  box-shadow: 0 0 20px rgb(101 137 255 / 70%);
+.bar {
   height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #63ceff, #7a7dff);
+  box-shadow: 0 0 24px #6ea4ff99;
 }
 
 .sparkline {
-  height: 56px;
-  margin-top: 0.8rem;
   width: 100%;
+  height: 72px;
+  margin-top: 0.8rem;
 }
 
 .sparkline polyline {
   fill: none;
-  stroke: #79bcff;
+  stroke: #8cd4ff;
   stroke-width: 2.3;
 }
 
 .sparkline circle {
-  fill: #dce8ff;
-  stroke: #102853;
+  fill: #ecf4ff;
+  stroke: #163266;
   stroke-width: 1;
 }
 
-.trend-card dl {
+.heat-grid {
+  margin-top: 0.85rem;
   display: grid;
-  gap: 0.45rem;
   grid-template-columns: repeat(4, 1fr);
-  margin: 0.85rem 0 0;
+  gap: 0.45rem;
 }
 
-.trend-card dt {
-  color: #9ba8d1;
-  font-size: 0.75rem;
+.heat-cell {
+  border-radius: 12px;
+  border: 1px solid #d5e2ff29;
+  padding: 0.45rem;
+  min-height: 54px;
 }
 
-.trend-card dd {
-  font-size: 0.88rem;
-  font-weight: 600;
-  margin: 0.15rem 0 0;
+.heat-cell span {
+  display: block;
+  font-size: 0.66rem;
+  color: #e7ecff;
+  opacity: 0.8;
+}
+
+.heat-cell strong {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.92rem;
 }
