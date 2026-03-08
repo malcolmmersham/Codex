@@ -1,0 +1,259 @@
+:root {
+  color-scheme: dark;
+  --deep-purple: #1c0f33;
+  --blue: #007da4;
+  --yellow: #ffd100;
+  --green: #3eaf49;
+  --orange: #ff9e18;
+  --pink: #e60a95;
+  --red: #d22630;
+  --white: #ffffff;
+  --text: #f4f5fa;
+  --muted: #d8d3e5;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Brown, Arial, 'Segoe UI', sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(1000px 460px at 0% 0%, #e60a9533, transparent 65%),
+    radial-gradient(900px 460px at 100% 0%, #ffd10030, transparent 60%),
+    linear-gradient(145deg, #2c1648 0%, var(--deep-purple) 45%, #120b24 100%);
+}
+
+.app-shell {
+  margin: 0 auto;
+  max-width: 1240px;
+  padding: 2.1rem 1.2rem 2.8rem;
+}
+
+.hero {
+  border: 1px solid #ffffff2d;
+  border-left: 7px solid var(--yellow);
+  border-radius: 22px;
+  padding: 1.5rem;
+  background: linear-gradient(120deg, #2a1446dd, #1c0f33d6);
+  box-shadow: 0 26px 55px #0503098f;
+}
+
+.eyebrow {
+  margin: 0;
+  color: #ffe387;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  margin: 0.45rem 0 0.7rem;
+  font-size: clamp(1.45rem, 3.1vw, 2.4rem);
+}
+
+.hero-copy {
+  margin: 0.45rem 0 0;
+  line-height: 1.5;
+  color: #f3ecff;
+  max-width: 75ch;
+}
+
+.kpi-grid {
+  margin-top: 1rem;
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.kpi-grid article {
+  border: 1px solid #ffffff2b;
+  border-radius: 12px;
+  padding: 0.72rem;
+  background: #ffffff12;
+}
+
+.kpi-grid span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.73rem;
+  text-transform: uppercase;
+}
+
+.kpi-grid strong {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 1.1rem;
+  line-height: 1.3;
+}
+
+.neg {
+  color: #ff9cb2;
+}
+
+.pillars {
+  margin-top: 0.9rem;
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.pillar {
+  background: #ffffff0f;
+  border: 1px solid #ffffff2e;
+  border-top: 5px solid var(--pillar-color);
+  border-radius: 14px;
+  padding: 0.85rem;
+}
+
+.pillar h3 {
+  margin: 0;
+  font-size: 0.97rem;
+}
+
+.pillar p {
+  margin: 0.42rem 0 0;
+  color: #ece8f8;
+  line-height: 1.45;
+  font-size: 0.91rem;
+}
+
+.toolbar {
+  margin: 1rem 0 0.65rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.toolbar h2 {
+  margin: 0;
+  font-size: 1.06rem;
+}
+
+.sort-wrap {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  color: var(--muted);
+}
+
+select {
+  border: 1px solid #ffffff49;
+  border-radius: 10px;
+  padding: 0.4rem 0.58rem;
+  background: #1e1034;
+  color: var(--white);
+}
+
+.cards {
+  display: grid;
+  gap: 0.86rem;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
+.card {
+  border: 1px solid #ffffff2b;
+  border-radius: 16px;
+  padding: 0.95rem;
+  background: linear-gradient(160deg, #22123bcf, #1b102ec9);
+  box-shadow: 0 16px 30px #04020963;
+}
+
+.card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.6rem;
+}
+
+.card h3 {
+  margin: 0;
+  font-size: 1.01rem;
+}
+
+.badge {
+  border-radius: 999px;
+  border: 1px solid #ffffff59;
+  background: var(--red);
+  color: var(--white);
+  padding: 0.19rem 0.56rem;
+  font-size: 0.71rem;
+  font-weight: 700;
+}
+
+.value-band {
+  margin-top: 0.7rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.value-band strong {
+  font-size: 1.62rem;
+}
+
+.value-band small {
+  color: #d9d2e8;
+}
+
+.bar-bg {
+  margin-top: 0.62rem;
+  height: 9px;
+  border-radius: 999px;
+  background: #ffffff21;
+  overflow: hidden;
+}
+
+.bar {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--blue), var(--pink), var(--orange), var(--yellow));
+}
+
+.sparkline {
+  margin-top: 0.8rem;
+  width: 100%;
+  height: 68px;
+}
+
+.sparkline polyline {
+  fill: none;
+  stroke: #6fd5ff;
+  stroke-width: 2.4;
+}
+
+.sparkline circle {
+  fill: #ffffff;
+  stroke: #6d3eac;
+  stroke-width: 1.2;
+}
+
+.year-grid {
+  margin: 0.8rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.44rem;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.year-grid dt {
+  font-size: 0.73rem;
+  color: #c9c0db;
+}
+
+.year-grid dd {
+  margin: 0.13rem 0 0;
+  font-size: 0.87rem;
+  font-weight: 700;
+}
+
+@media (max-width: 900px) {
+  .pillars {
+    grid-template-columns: 1fr;
+  }
+}
