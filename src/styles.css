@@ -186,27 +186,6 @@ select {
   font-weight: 700;
 }
 
-
-.badge-up {
-  background: var(--green);
-}
-
-.meta-row {
-  margin-top: 0.45rem;
-  display: flex;
-  justify-content: space-between;
-  gap: 0.5rem;
-  color: #d9d2e8;
-  font-size: 0.77rem;
-}
-
-.wtf-pill {
-  border: 1px solid #ffffff4f;
-  border-radius: 999px;
-  padding: 0.12rem 0.45rem;
-  background: #ffffff12;
-  white-space: nowrap;
-}
 .value-band {
   margin-top: 0.7rem;
   display: flex;

@@ -35,33 +35,7 @@ const MIN = Math.min(...values);
 const MAX = Math.max(...values);
 const AVG2025 = DATA.reduce((sum, row) => sum + row.y2025, 0) / DATA.length;
 const AVG_CHANGE = DATA.reduce((sum, row) => sum + row.change, 0) / DATA.length;
-
-function trendWeight(trendText) {
-  const t = String(trendText || '').toLowerCase();
-  if (t.includes('inclin') || t.includes('improv') || t.includes('up')) return 1;
-  if (t.includes('declin') || t.includes('down')) return -1;
-  return 0;
-}
-
-function enrichRow(row) {
-  const latestLift = row.y2025 - row.y2024;
-  const trajectory = (row.y2025 - row.y2022) / 3;
-  const textSignal = trendWeight(row.trend);
-
-  // Weighted Trend Factor (WTF): combines text + numeric movement.
-  // Positive means improving momentum; negative means falling momentum.
-  const wtf = latestLift * 0.5 + trajectory * 0.35 + textSignal * 0.15;
-
-  return {
-    ...row,
-    latestLift,
-    wtf,
-  };
-}
-
-const ENRICHED = DATA.map(enrichRow);
-const strongestDrop = [...ENRICHED].sort((a, b) => a.change - b.change)[0];
-const largestIncline = [...ENRICHED].sort((a, b) => b.latestLift - a.latestLift)[0];
+const strongestDrop = [...DATA].sort((a, b) => a.change - b.change)[0];
 
 function linePoints(vals, width = 220, height = 68) {
   return vals
@@ -100,10 +74,8 @@ export function App() {
   const [sortBy, setSortBy] = React.useState('decline');
 
   const sorted = React.useMemo(() => {
-    const copy = [...ENRICHED];
+    const copy = [...DATA];
     if (sortBy === 'decline') copy.sort((a, b) => a.change - b.change);
-    if (sortBy === 'incline') copy.sort((a, b) => b.latestLift - a.latestLift);
-    if (sortBy === 'wtf') copy.sort((a, b) => b.wtf - a.wtf);
     if (sortBy === '2025') copy.sort((a, b) => b.y2025 - a.y2025);
     if (sortBy === 'name') copy.sort((a, b) => a.indicator.localeCompare(b.indicator));
     return copy;
@@ -120,25 +92,20 @@ export function App() {
       React.createElement(
         'p',
         { className: 'hero-copy' },
-        `Kia ora. We’re seeing a clear slide across most indicators from 2022 to 2025. The biggest drop is ${strongestDrop.indicator} (${fmtPP(strongestDrop.change)}).`
+        `Kia ora. We’re seeing a clear slide across most indicators from 2022 to 2025. The biggest drop is ${strongestDrop.indicator} (${fmtPP(strongestDrop.change)}).`,
       ),
       React.createElement(
         'p',
         { className: 'hero-copy' },
-        `Largest incline right now is ${largestIncline.indicator} (${fmtPP(largestIncline.latestLift)} from 2024 to 2025).`
-      ),
-      React.createElement(
-        'p',
-        { className: 'hero-copy' },
-        `Kōrero mai. What shift would matter most for your whānau and community?`
+        'Kōrero mai. What shift would matter most for your whānau and community?',
       ),
       React.createElement(
         'div',
         { className: 'kpi-grid' },
-        React.createElement('article', null, React.createElement('span', null, 'Indicators tracked'), React.createElement('strong', null, ENRICHED.length)),
+        React.createElement('article', null, React.createElement('span', null, 'Indicators tracked'), React.createElement('strong', null, DATA.length)),
         React.createElement('article', null, React.createElement('span', null, 'Average in 2025'), React.createElement('strong', null, fmt(AVG2025))),
         React.createElement('article', null, React.createElement('span', null, 'Average change'), React.createElement('strong', { className: 'neg' }, fmtPP(AVG_CHANGE))),
-        React.createElement('article', null, React.createElement('span', null, 'Largest incline'), React.createElement('strong', null, `${largestIncline.indicator}`)),
+        React.createElement('article', null, React.createElement('span', null, 'Largest decline'), React.createElement('strong', null, strongestDrop.indicator)),
       ),
     ),
 
@@ -177,8 +144,6 @@ export function App() {
           'select',
           { id: 'sortBy', value: sortBy, onChange: (e) => setSortBy(e.target.value) },
           React.createElement('option', { value: 'decline' }, 'Largest decline'),
-          React.createElement('option', { value: 'incline' }, 'Largest incline'),
-          React.createElement('option', { value: 'wtf' }, 'Weighted WTF score'),
           React.createElement('option', { value: '2025' }, 'Highest 2025 score'),
           React.createElement('option', { value: 'name' }, 'Name A–Z'),
         ),
@@ -197,19 +162,13 @@ export function App() {
             'header',
             { className: 'card-head' },
             React.createElement('h3', null, row.indicator),
-            React.createElement('span', { className: `badge ${row.latestLift >= 0 ? 'badge-up' : ''}` }, row.latestLift >= 0 ? 'Inclining' : 'Declining'),
+            React.createElement('span', { className: 'badge' }, row.trend),
           ),
           React.createElement(
             'div',
             { className: 'value-band' },
             React.createElement('strong', null, fmt(row.y2025)),
             React.createElement('small', null, `${fmtPP(row.change)} since 2022`),
-          ),
-          React.createElement(
-            'div',
-            { className: 'meta-row' },
-            React.createElement('small', null, `2024→2025: ${fmtPP(row.latestLift)}`),
-            React.createElement('small', { className: 'wtf-pill' }, `WTF ${row.wtf.toFixed(2)}`),
           ),
           React.createElement('div', { className: 'bar-bg' }, React.createElement('div', { className: 'bar', style: { width: `${pct}%` } })),
           React.createElement(IndicatorLine, { row }),
