@@ -15,15 +15,15 @@ const BRAND = {
 };
 
 const DATA = [
-  { indicator: 'Tairāwhiti Great Place', y2022: 76.6, y2023: 66.0, y2024: 62.6, y2025: 56.7, change: -19.9 },
-  { indicator: 'Diverse Employment', y2022: 34.7, y2023: 25.2, y2024: 25.1, y2025: 23.7, change: -11.1 },
-  { indicator: 'Attractive for Youth', y2022: 35.1, y2023: 23.0, y2024: 22.8, y2025: 21.7, change: -13.4 },
-  { indicator: 'Thriving City Centre', y2022: 11.2, y2023: 7.7, y2024: 8.2, y2025: 7.9, change: -3.2 },
-  { indicator: 'Good for Business', y2022: 27.5, y2023: 21.9, y2024: 17.0, y2025: 17.3, change: -10.3 },
-  { indicator: 'Training/Career', y2022: 34.2, y2023: 30.8, y2024: 30.2, y2025: 23.4, change: -10.8 },
-  { indicator: 'Digital/Technology', y2022: 32.7, y2023: 24.2, y2024: 26.6, y2025: 25.6, change: -7.1 },
-  { indicator: 'Pride in Tairāwhiti', y2022: 41.8, y2023: 31.9, y2024: 29.6, y2025: 30.9, change: -11.0 },
-  { indicator: 'Confident Finding Job', y2022: 43.4, y2023: 40.0, y2024: 32.5, y2025: 32.4, change: -11.1 },
+  { indicator: 'Tairāwhiti Great Place', y2022: 76.6, y2023: 66.0, y2024: 62.6, y2025: 56.7, change: -19.9, trend: 'Declining' },
+  { indicator: 'Diverse Employment', y2022: 34.7, y2023: 25.2, y2024: 25.1, y2025: 23.7, change: -11.1, trend: 'Declining' },
+  { indicator: 'Attractive for Youth', y2022: 35.1, y2023: 23.0, y2024: 22.8, y2025: 21.7, change: -13.4, trend: 'Declining' },
+  { indicator: 'Thriving City Centre', y2022: 11.2, y2023: 7.7, y2024: 8.2, y2025: 7.9, change: -3.2, trend: 'Declining' },
+  { indicator: 'Good for Business', y2022: 27.5, y2023: 21.9, y2024: 17.0, y2025: 17.3, change: -10.3, trend: 'Declining' },
+  { indicator: 'Training/Career', y2022: 34.2, y2023: 30.8, y2024: 30.2, y2025: 23.4, change: -10.8, trend: 'Declining' },
+  { indicator: 'Digital/Technology', y2022: 32.7, y2023: 24.2, y2024: 26.6, y2025: 25.6, change: -7.1, trend: 'Declining' },
+  { indicator: 'Pride in Tairāwhiti', y2022: 41.8, y2023: 31.9, y2024: 29.6, y2025: 30.9, change: -11.0, trend: 'Declining' },
+  { indicator: 'Confident Finding Job', y2022: 43.4, y2023: 40.0, y2024: 32.5, y2025: 32.4, change: -11.1, trend: 'Declining' },
 ];
 
 const YEARS = [2022, 2023, 2024, 2025];
@@ -35,7 +35,33 @@ const MIN = Math.min(...values);
 const MAX = Math.max(...values);
 const AVG2025 = DATA.reduce((sum, row) => sum + row.y2025, 0) / DATA.length;
 const AVG_CHANGE = DATA.reduce((sum, row) => sum + row.change, 0) / DATA.length;
-const strongestDrop = [...DATA].sort((a, b) => a.change - b.change)[0];
+
+function trendWeight(trendText) {
+  const t = String(trendText || '').toLowerCase();
+  if (t.includes('inclin') || t.includes('improv') || t.includes('up')) return 1;
+  if (t.includes('declin') || t.includes('down')) return -1;
+  return 0;
+}
+
+function enrichRow(row) {
+  const latestLift = row.y2025 - row.y2024;
+  const trajectory = (row.y2025 - row.y2022) / 3;
+  const textSignal = trendWeight(row.trend);
+
+  // Weighted Trend Factor (WTF): combines text + numeric movement.
+  // Positive means improving momentum; negative means falling momentum.
+  const wtf = latestLift * 0.5 + trajectory * 0.35 + textSignal * 0.15;
+
+  return {
+    ...row,
+    latestLift,
+    wtf,
+  };
+}
+
+const ENRICHED = DATA.map(enrichRow);
+const strongestDrop = [...ENRICHED].sort((a, b) => a.change - b.change)[0];
+const largestIncline = [...ENRICHED].sort((a, b) => b.latestLift - a.latestLift)[0];
 
 function linePoints(vals, width = 220, height = 68) {
   return vals
@@ -74,8 +100,10 @@ export function App() {
   const [sortBy, setSortBy] = React.useState('decline');
 
   const sorted = React.useMemo(() => {
-    const copy = [...DATA];
+    const copy = [...ENRICHED];
     if (sortBy === 'decline') copy.sort((a, b) => a.change - b.change);
+    if (sortBy === 'incline') copy.sort((a, b) => b.latestLift - a.latestLift);
+    if (sortBy === 'wtf') copy.sort((a, b) => b.wtf - a.wtf);
     if (sortBy === '2025') copy.sort((a, b) => b.y2025 - a.y2025);
     if (sortBy === 'name') copy.sort((a, b) => a.indicator.localeCompare(b.indicator));
     return copy;
@@ -92,19 +120,25 @@ export function App() {
       React.createElement(
         'p',
         { className: 'hero-copy' },
-        `Kia ora. We’re seeing a clear slide across every indicator from 2022 to 2025. The biggest drop is ${strongestDrop.indicator} (${fmtPP(strongestDrop.change)}).`
+        `Kia ora. We’re seeing a clear slide across most indicators from 2022 to 2025. The biggest drop is ${strongestDrop.indicator} (${fmtPP(strongestDrop.change)}).`
       ),
       React.createElement(
         'p',
         { className: 'hero-copy' },
-        `What matters most for your whānau and community? Kōrero mai. We’ll keep listening, sharing, and acting together.`
+        `Largest incline right now is ${largestIncline.indicator} (${fmtPP(largestIncline.latestLift)} from 2024 to 2025).`
+      ),
+      React.createElement(
+        'p',
+        { className: 'hero-copy' },
+        `Kōrero mai. What shift would matter most for your whānau and community?`
       ),
       React.createElement(
         'div',
         { className: 'kpi-grid' },
-        React.createElement('article', null, React.createElement('span', null, 'Indicators tracked'), React.createElement('strong', null, DATA.length)),
+        React.createElement('article', null, React.createElement('span', null, 'Indicators tracked'), React.createElement('strong', null, ENRICHED.length)),
         React.createElement('article', null, React.createElement('span', null, 'Average in 2025'), React.createElement('strong', null, fmt(AVG2025))),
         React.createElement('article', null, React.createElement('span', null, 'Average change'), React.createElement('strong', { className: 'neg' }, fmtPP(AVG_CHANGE))),
+        React.createElement('article', null, React.createElement('span', null, 'Largest incline'), React.createElement('strong', null, `${largestIncline.indicator}`)),
       ),
     ),
 
@@ -143,6 +177,8 @@ export function App() {
           'select',
           { id: 'sortBy', value: sortBy, onChange: (e) => setSortBy(e.target.value) },
           React.createElement('option', { value: 'decline' }, 'Largest decline'),
+          React.createElement('option', { value: 'incline' }, 'Largest incline'),
+          React.createElement('option', { value: 'wtf' }, 'Weighted WTF score'),
           React.createElement('option', { value: '2025' }, 'Highest 2025 score'),
           React.createElement('option', { value: 'name' }, 'Name A–Z'),
         ),
@@ -161,13 +197,19 @@ export function App() {
             'header',
             { className: 'card-head' },
             React.createElement('h3', null, row.indicator),
-            React.createElement('span', { className: 'badge' }, 'Declining'),
+            React.createElement('span', { className: `badge ${row.latestLift >= 0 ? 'badge-up' : ''}` }, row.latestLift >= 0 ? 'Inclining' : 'Declining'),
           ),
           React.createElement(
             'div',
             { className: 'value-band' },
             React.createElement('strong', null, fmt(row.y2025)),
             React.createElement('small', null, `${fmtPP(row.change)} since 2022`),
+          ),
+          React.createElement(
+            'div',
+            { className: 'meta-row' },
+            React.createElement('small', null, `2024→2025: ${fmtPP(row.latestLift)}`),
+            React.createElement('small', { className: 'wtf-pill' }, `WTF ${row.wtf.toFixed(2)}`),
           ),
           React.createElement('div', { className: 'bar-bg' }, React.createElement('div', { className: 'bar', style: { width: `${pct}%` } })),
           React.createElement(IndicatorLine, { row }),
